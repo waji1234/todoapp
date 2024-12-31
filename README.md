@@ -1,36 +1,89 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+# Todo Application
+
+A full-stack Todo Application built using **Next.js**, **NextAuth.js**, **Prisma ORM**, and **PostgreSQL**. Users can register and log in, manage tasks (add, edit, delete), and view tasks on a dashboard.
+## Technologies Used
+
+- **Frontend:**
+  - Next.js (React Framework)
+  - TailwindCSS (Styling)
+  - NextAuth.js (Authentication)
+  
+- **Backend:**
+  - Prisma ORM (Database management)
+  - PostgreSQL (Database)
+
+## Features
+
+- **User Authentication:**
+  - Users can register or log in via **NextAuth.js**.
+  - Secure handling of user data and authentication state.
+
+- **Task Management:**
+  - Add new tasks.
+  - View and manage tasks with options to **edit** or **delete** them.
+  - Real-time updates without page refresh after adding, editing, or deleting tasks.
+
+- **Dashboard:**
+  - Displays a list of tasks after login.
+  - Each task has an option to edit or delete.
+  - Tasks are stored in a **PostgreSQL** database via **Prisma ORM**.
+
+- **Edit Page:**
+  - Clicking the edit icon redirects the user to an edit page.
+  - The task name is displayed in an input field for editing.
+  - Updates are reflected in the database and the dashboard.
+
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. **Node.js** (v14 or higher)  
+2. **PostgreSQL** database (you can use a local setup or cloud-based solutions like Heroku, AWS, etc.)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Setup Instructions
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+1. Clone this repository to your local machine:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. Install dependencies:
 
-## Learn More
+    ```bash
+    npm install
+    ```
 
-To learn more about Next.js, take a look at the following resources:
+3. Set up the PostgreSQL database and create the `.env` file in the root of the project with the following variables:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+    ```env
+    DATABASE_URL=postgresql://postgres:yourpassword@localhost:5432/todo_app
+    NEXTAUTH_URL=http://localhost:3000
+    NEXTAUTH_SECRET=your-nextauth-secret
+    GOOGLE_CLIENT_ID=your-google-client-id
+    GOOGLE_CLIENT_SECRET=your-google-client-secret
+    ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+    - Replace `yourpassword`, `your-nextauth-secret`, `your-google-client-id`, and `your-google-client-secret` with your own credentials.
+    - The `DATABASE_URL` is the connection string for your PostgreSQL database. Adjust it as necessary.
 
-## Deploy on Vercel
+4. Set up the Prisma database schema:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+    ```bash
+    npx prisma migrate dev --name init
+    ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+5. Start the development server:
+
+    ```bash
+    npm run dev
+    ```
+
+6. Open your browser and visit `http://localhost:3000` to access the Todo Application.
+
+### Environment Variables
+
+- **`DATABASE_URL`**: Connection string for the PostgreSQL database.
+- **`NEXTAUTH_URL`**: URL where your application is hosted (for local development, use `http://localhost:3000`).
+- **`NEXTAUTH_SECRET`**: Secret key for NextAuth.js (used for encrypting session data).
+- **`GOOGLE_CLIENT_ID`**: Your Google OAuth Client ID.
+- **`GOOGLE_CLIENT_SECRET`**: Your Google OAuth Client Secret.
+
