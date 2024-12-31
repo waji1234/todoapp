@@ -1,15 +1,15 @@
-'use client'
-import { useEffect, useState } from 'react';
-import Header from './components/Header';
-import TaskForm from './components/TaskForm';
-import TaskList from './components/TaskList';
+"use client";
+import { useEffect, useState } from "react";
+import Header from "./components/Header";
+import TaskForm from "./components/TaskForm";
+import TaskList from "./components/TaskList";
 
 export default function Dashboard() {
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
     async function fetchTasks() {
-      const response = await fetch('/api/tasks');
+      const response = await fetch("/api/tasks");
       const data = await response.json();
       setTasks(data);
     }
@@ -17,9 +17,9 @@ export default function Dashboard() {
   }, []);
 
   const addTask = async (name) => {
-    const response = await fetch('/api/tasks', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const response = await fetch("/api/tasks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name }),
     });
     const newTask = await response.json();
@@ -27,9 +27,9 @@ export default function Dashboard() {
   };
 
   const deleteTask = async (id) => {
-    await fetch('/api/tasks', {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
+    await fetch("/api/tasks", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id }),
     });
     setTasks(tasks.filter((task) => task.id !== id));
@@ -49,4 +49,3 @@ export default function Dashboard() {
     </div>
   );
 }
-
