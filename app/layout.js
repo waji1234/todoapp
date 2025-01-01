@@ -1,7 +1,8 @@
-"use client"; // This ensures the layout is a Client Component
+"use client"; // Make sure this file is treated as a Client Component
 
+import { useEffect, useState } from "react";
+import { SessionProvider, useSession } from "next-auth/react"; // Import SessionProvider and useSession
 import { Geist, Geist_Mono } from "next/font/google";
-import { SessionProvider } from "next-auth/react"; // Import SessionProvider
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,16 +15,28 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Root Layout Component
 export default function RootLayout({ children }) {
+  const [loading, setLoading] = useState(true);
+
+  // Set loading state to false once the page is hydrated
+  useEffect(() => {
+    setLoading(false);
+  }, []);
+
+  if (loading) {
+    return null; // Or show a loading spinner
+  }
+
   return (
-    <SessionProvider> {/* Wrap children with SessionProvider */}
+    <SessionProvider>
       <html lang="en">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
           {children}
         </body>
       </html>
     </SessionProvider>
   );
 }
+

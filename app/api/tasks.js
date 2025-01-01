@@ -1,28 +1,39 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { getSession } from "next-auth/react";
+import prisma from "../../../lib/prisma";
 
 export default async function handler(req, res) {
+  const session = await getSession({ req });
+
+  if (!session) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
   if (req.method === "GET") {
-    const tasks = await prisma.task.findMany();
-    res.status(200).json(tasks);
+    // Fetch tasks
+    try {
+      const tasks = await prisma.task.findMany({
+        where: { userEmail: session.user.email },
+      });
+      res.status(200).json(tasks);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch tasks" });
+    }
   } else if (req.method === "POST") {
-    const { name } = req.body;
-    const newTask = await prisma.task.create({ data: { name } });
-    res.status(201).json(newTask);
-  } else if (req.method === "PUT") {
-    const { id, updatedName } = req.body;
-    const updatedTask = await prisma.task.update({
-      where: { id },
-      data: { name: updatedName },
-    });
-    res.status(200).json(updatedTask);
-  } else if (req.method === "DELETE") {
-    const { id } = req.body;
-    await prisma.task.delete({ where: { id } });
-    res.status(204).end();
+    // Add a task
+    try {
+      const { name } = req.body;
+      const newTask = await prisma.task.create({
+        data: {
+          name,
+          userEmail: session.user.email,
+        },
+      });
+      res.status(201).json(newTask);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to create task" });
+    }
   } else {
-    res.setHeader("Allow", ["GET", "POST", "PUT", "DELETE"]);
+    res.setHeader("Allow", ["GET", "POST"]);
     res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }
